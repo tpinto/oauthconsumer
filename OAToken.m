@@ -33,13 +33,13 @@
 + (id)loadSetting:(const NSString *)name provider:(const NSString *)provider prefix:(const NSString *)prefix;
 + (void)saveSetting:(NSString *)name object:(id)object provider:(const NSString *)provider prefix:(const NSString *)prefix;
 + (NSNumber *)durationWithString:(NSString *)aDuration;
-+ (NSDictionary *)attributesWithString:(NSString *)theAttributes;
++ (NSMutableDictionary *)attributesWithString:(NSString *)theAttributes;
 
 @end
 
 @implementation OAToken
 
-@synthesize key, secret, session, duration, attributes, forRenewal;
+@synthesize key, secret, session, duration, forRenewal;
 
 #pragma mark init
 
@@ -53,7 +53,7 @@
 }
 
 - (id)initWithKey:(NSString *)aKey secret:(NSString *)aSecret session:(NSString *)aSession
-		 duration:(NSNumber *)aDuration attributes:(NSDictionary *)theAttributes created:(NSDate *)creation
+		 duration:(NSNumber *)aDuration attributes:(NSMutableDictionary *)theAttributes created:(NSDate *)creation
 		renewable:(BOOL)renew {
 	[super init];
 	self.key = aKey;
@@ -176,9 +176,14 @@
 	[attributes setObject: aAttribute forKey: aKey];
 }
 
+- (NSDictionary*) attributes
+{
+	return attributes;
+}
+
 - (void)setAttributes:(NSDictionary *)theAttributes {
 	[attributes release];
-	attributes = [[NSMutableDictionary alloc] initWithDictionary:theAttributes];
+	attributes = [theAttributes mutableCopy];
 	
 }
 
