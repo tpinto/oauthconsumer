@@ -53,7 +53,7 @@ signatureProvider:(id<OASignatureProviding, NSObject>)aProvider {
     if (aToken == nil) {
         token = [[OAToken alloc] init];
     } else {
-        token = aToken;
+        token = [aToken retain];
     }
     
     if (aRealm == nil) {
@@ -95,6 +95,34 @@ signatureProvider:(id<OASignatureProviding, NSObject>)aProvider
     
     return self;
 }
+
+- (void) dealloc;
+{
+//    [consumer release];
+    consumer = nil;
+	
+    [token release];
+    token = nil;
+	
+    [realm release];
+    realm = nil;
+	
+//	[signatureProvider release];
+	[(NSObject*)signatureProvider release];
+    signatureProvider = nil;
+	
+    [timestamp release];
+	timestamp = nil;
+	
+	[nonce release];
+	nonce = nil;
+	
+//	[signature release];
+	signature = nil;
+	
+    [super dealloc];
+}
+
 
 - (void)prepare {
     // sign

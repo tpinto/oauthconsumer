@@ -178,7 +178,7 @@
 #pragma mark attributes
 
 - (void)setAttribute:(const NSString *)aKey value:(const NSString *)aAttribute {
-	if (!attributes) {
+	if (attributes == nil) {
 		attributes = [[NSMutableDictionary alloc] init];
 	}
 	[attributes setObject: aAttribute forKey: aKey];
@@ -189,8 +189,12 @@
 }
 
 - (void)setAttributes:(NSDictionary *)theAttributes {
-	[attributes release];
-	attributes = [[NSMutableDictionary alloc] initWithDictionary:theAttributes];
+//	[attributes release];
+//	attributes = [[NSMutableDictionary alloc] initWithDictionary:theAttributes];
+	for (NSString *theKey in theAttributes) {
+		NSString  *value = [theAttributes objectForKey:theKey];
+		[self setAttribute:theKey value:value];
+	}
 }
 
 - (BOOL)hasAttributes {
