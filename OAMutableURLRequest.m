@@ -53,7 +53,7 @@ signatureProvider:(id<OASignatureProviding, NSObject>)aProvider {
     if (aToken == nil) {
         token = [[OAToken alloc] init];
     } else {
-        token = aToken;
+        token = [aToken retain];
     }
     
     if (aRealm == nil) {
@@ -96,6 +96,34 @@ signatureProvider:(id<OASignatureProviding, NSObject>)aProvider
     return self;
 }
 
+- (void) dealloc;
+{
+//    [consumer release];
+    consumer = nil;
+	
+    [token release];
+    token = nil;
+	
+    [realm release];
+    realm = nil;
+	
+//	[signatureProvider release];
+	[(NSObject*)signatureProvider release];
+    signatureProvider = nil;
+	
+    [timestamp release];
+	timestamp = nil;
+	
+	[nonce release];
+	nonce = nil;
+	
+//	[signature release];
+	signature = nil;
+	
+    [super dealloc];
+}
+
+
 - (void)prepare {
     // sign
 //	NSLog(@"Base string is: %@", [self _signatureBaseString]);
@@ -133,7 +161,7 @@ signatureProvider:(id<OASignatureProviding, NSObject>)aProvider
 - (void)_generateNonce {
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
-    [NSMakeCollectable(theUUID) autorelease];
+    CFRelease(theUUID);
     nonce = (NSString *)string;
 }
 
@@ -161,9 +189,9 @@ signatureProvider:(id<OASignatureProviding, NSObject>)aProvider
 		}
 	}
     
-    [parameterPairs sortUsingSelector:@selector(compare:)];
-    NSString *normalizedRequestParameters = [parameterPairs componentsJoinedByString:@"&"];
-    [parameterPairs release];
+    NSArray *sortedPairs = [parameterPairs sortedArrayUsingSelector:@selector(compare:)];
+    [parameterPairs release], parameterPairs = nil;
+    NSString *normalizedRequestParameters = [sortedPairs componentsJoinedByString:@"&"];
     
 //	NSLog(@"Normalized: %@", normalizedRequestParameters);
     // OAuth Spec, Section 9.1.2 "Concatenate Request Elements"

@@ -162,6 +162,9 @@ else if (theRemainingBytes == 2)
 	}
 (void)theOutIndex; // tell the static analyser we don't care that the last postincrement is never read
 return(true);
+
+// MODS THS - silence analyzer warnings about stored values never being read
+#pragma unused(theOutIndex)
 }
 
 bool Base64DecodeData(const void *inInputData, size_t inInputDataSize, void *ioOutputData, size_t *ioOutputDataSize)
