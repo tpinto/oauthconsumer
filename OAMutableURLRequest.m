@@ -96,34 +96,6 @@ signatureProvider:(id<OASignatureProviding, NSObject>)aProvider
     return self;
 }
 
-- (void) dealloc;
-{
-//    [consumer release];
-    consumer = nil;
-	
-    [token release];
-    token = nil;
-	
-    [realm release];
-    realm = nil;
-	
-//	[signatureProvider release];
-	[(NSObject*)signatureProvider release];
-    signatureProvider = nil;
-	
-    [timestamp release];
-	timestamp = nil;
-	
-	[nonce release];
-	nonce = nil;
-	
-//	[signature release];
-	signature = nil;
-	
-    [super dealloc];
-}
-
-
 - (void)prepare {
     // sign
 //	NSLog(@"Base string is: %@", [self _signatureBaseString]);
@@ -206,7 +178,6 @@ signatureProvider:(id<OASignatureProviding, NSObject>)aProvider
 	}
     
     NSArray *sortedPairs = [parameterPairs sortedArrayUsingSelector:@selector(compare:)];
-    [parameterPairs release], parameterPairs = nil;
     NSString *normalizedRequestParameters = [sortedPairs componentsJoinedByString:@"&"];
     [parameterPairs release];
 	//	NSLog(@"Normalized: %@", normalizedRequestParameters);
@@ -227,3 +198,4 @@ signatureProvider:(id<OASignatureProviding, NSObject>)aProvider
 }
 
 @end
+
