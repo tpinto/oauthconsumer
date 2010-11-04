@@ -189,12 +189,13 @@
 }
 
 - (void)setAttributes:(NSDictionary *)theAttributes {
-//	[attributes release];
-//	attributes = [[NSMutableDictionary alloc] initWithDictionary:theAttributes];
-	for (NSString *theKey in theAttributes) {
-		NSString  *value = [theAttributes objectForKey:theKey];
-		[self setAttribute:theKey value:value];
+	[attributes release];
+	if (theAttributes) {
+		attributes = [[NSMutableDictionary alloc] initWithDictionary:theAttributes];
+	}else {
+		attributes = nil;
 	}
+	
 }
 
 - (BOOL)hasAttributes {
